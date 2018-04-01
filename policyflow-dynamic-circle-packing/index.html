@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+
+
+</head>
+<body>
+<input type="button" id="adddata" name="Add Data" value="Add Data" />
+<input type="button" id="samesize" name="Same Size" value="Same Size" />
+<input type="button" id="diffsize" name="Diff Size" value="Diff Size" />
+
+<br>
+Choose circle size:
+
+Min:
+<input id="circlemin" type="range" min="100" max="5000000" step="10000" value="100">
+
+Max:
+<input id="circlemax" type="range" min="100" max="5000000" step="10000" value="5000000">
+
+<br>
+
+<div id="vis"></div>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
