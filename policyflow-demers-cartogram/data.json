@@ -1,0 +1,1387 @@
+{
+  "nodes": [
+    {
+      "state": "AK",
+      "lat": 61.385,
+      "lon": -152.2683,
+      "population": [
+        { "year": 1900, "pop": null },
+        { "year": 1910, "pop": null },
+        { "year": 1920, "pop": null },
+        { "year": 1930, "pop": null },
+        { "year": 1940, "pop": null },
+        { "year": 1950, "pop": 129 },
+        { "year": 1960, "pop": 226 },
+        { "year": 1970, "pop": 303 },
+        { "year": 1980, "pop": 402 },
+        { "year": 1990, "pop": 550 },
+        { "year": 2000, "pop": 627 },
+        { "year": 2010, "pop": 710 }
+      ]
+    },
+    {
+      "state": "AL",
+      "lat": 32.799,
+      "lon": -86.8073,
+      "population": [
+        { "year": 1900, "pop": 1830 },
+        { "year": 1910, "pop": 2150 },
+        { "year": 1920, "pop": 2359 },
+        { "year": 1930, "pop": 2647 },
+        { "year": 1940, "pop": 2845 },
+        { "year": 1950, "pop": 3062 },
+        { "year": 1960, "pop": 3267 },
+        { "year": 1970, "pop": 3444 },
+        { "year": 1980, "pop": 3894 },
+        { "year": 1990, "pop": 4041 },
+        { "year": 2000, "pop": 4447 },
+        { "year": 2010, "pop": 4780 }
+      ]
+    },
+    {
+      "state": "AR",
+      "lat": 34.9513,
+      "lon": -92.3809,
+      "population": [
+        { "year": 1900, "pop": 1314 },
+        { "year": 1910, "pop": 1583 },
+        { "year": 1920, "pop": 1756 },
+        { "year": 1930, "pop": 1859 },
+        { "year": 1940, "pop": 1955 },
+        { "year": 1950, "pop": 1910 },
+        { "year": 1960, "pop": 1786 },
+        { "year": 1970, "pop": 1923 },
+        { "year": 1980, "pop": 2286 },
+        { "year": 1990, "pop": 2351 },
+        { "year": 2000, "pop": 2673 },
+        { "year": 2010, "pop": 2916 }
+      ]
+    },
+    {
+      "state": "AZ",
+      "lat": 33.7712,
+      "lon": -111.3877,
+      "population": [
+        { "year": 1900, "pop": 124 },
+        { "year": 1910, "pop": 206 },
+        { "year": 1920, "pop": 340 },
+        { "year": 1930, "pop": 434 },
+        { "year": 1940, "pop": 499 },
+        { "year": 1950, "pop": 750 },
+        { "year": 1960, "pop": 1302 },
+        { "year": 1970, "pop": 1775 },
+        { "year": 1980, "pop": 2718 },
+        { "year": 1990, "pop": 3665 },
+        { "year": 2000, "pop": 5130 },
+        { "year": 2010, "pop": 6392 }
+      ]
+    },
+    {
+      "state": "CA",
+      "lat": 36.17,
+      "lon": -119.7462,
+      "population": [
+        { "year": 1900, "pop": 1490 },
+        { "year": 1910, "pop": 2406 },
+        { "year": 1920, "pop": 3554 },
+        { "year": 1930, "pop": 5711 },
+        { "year": 1940, "pop": 6950 },
+        { "year": 1950, "pop": 10586 },
+        { "year": 1960, "pop": 15717 },
+        { "year": 1970, "pop": 19971 },
+        { "year": 1980, "pop": 23668 },
+        { "year": 1990, "pop": 29760 },
+        { "year": 2000, "pop": 33872 },
+        { "year": 2010, "pop": 37254 }
+      ]
+    },
+    {
+      "state": "CO",
+      "lat": 39.0646,
+      "lon": -105.3272,
+      "population": [
+        { "year": 1900, "pop": 543 },
+        { "year": 1910, "pop": 804 },
+        { "year": 1920, "pop": 937 },
+        { "year": 1930, "pop": 1040 },
+        { "year": 1940, "pop": 1130 },
+        { "year": 1950, "pop": 1325 },
+        { "year": 1960, "pop": 1754 },
+        { "year": 1970, "pop": 2210 },
+        { "year": 1980, "pop": 2890 },
+        { "year": 1990, "pop": 3294 },
+        { "year": 2000, "pop": 4302 },
+        { "year": 2010, "pop": 5029 }
+      ]
+    },
+    {
+      "state": "CT",
+      "lat": 41.5834,
+      "lon": -72.7622,
+      "population": [
+        { "year": 1900, "pop": 910 },
+        { "year": 1910, "pop": 1122 },
+        { "year": 1920, "pop": 1391 },
+        { "year": 1930, "pop": 1613 },
+        { "year": 1940, "pop": 1708 },
+        { "year": 1950, "pop": 2007 },
+        { "year": 1960, "pop": 2535 },
+        { "year": 1970, "pop": 3032 },
+        { "year": 1980, "pop": 3108 },
+        { "year": 1990, "pop": 3287 },
+        { "year": 2000, "pop": 3406 },
+        { "year": 2010, "pop": 3574 }
+      ]
+    },
+    {
+      "state": "DC",
+      "lat": 38.8964,
+      "lon": -77.0262,
+      "population": [
+        { "year": 1900, "pop": 278 },
+        { "year": 1910, "pop": 334 },
+        { "year": 1920, "pop": 440 },
+        { "year": 1930, "pop": 488 },
+        { "year": 1940, "pop": 690 },
+        { "year": 1950, "pop": 802 },
+        { "year": 1960, "pop": 764 },
+        { "year": 1970, "pop": 757 },
+        { "year": 1980, "pop": 638 },
+        { "year": 1990, "pop": 607 },
+        { "year": 2000, "pop": 572 },
+        { "year": 2010, "pop": 602 }
+      ]
+    },
+    {
+      "state": "DE",
+      "lat": 39.3498,
+      "lon": -75.5148,
+      "population": [
+        { "year": 1900, "pop": 185 },
+        { "year": 1910, "pop": 203 },
+        { "year": 1920, "pop": 219 },
+        { "year": 1930, "pop": 239 },
+        { "year": 1940, "pop": 269 },
+        { "year": 1950, "pop": 318 },
+        { "year": 1960, "pop": 446 },
+        { "year": 1970, "pop": 548 },
+        { "year": 1980, "pop": 594 },
+        { "year": 1990, "pop": 666 },
+        { "year": 2000, "pop": 784 },
+        { "year": 2010, "pop": 898 }
+      ]
+    },
+    {
+      "state": "FL",
+      "lat": 27.8333,
+      "lon": -81.717,
+      "population": [
+        { "year": 1900, "pop": 530 },
+        { "year": 1910, "pop": 756 },
+        { "year": 1920, "pop": 962 },
+        { "year": 1930, "pop": 1471 },
+        { "year": 1940, "pop": 1915 },
+        { "year": 1950, "pop": 2771 },
+        { "year": 1960, "pop": 4952 },
+        { "year": 1970, "pop": 6791 },
+        { "year": 1980, "pop": 9746 },
+        { "year": 1990, "pop": 12938 },
+        { "year": 2000, "pop": 15983 },
+        { "year": 2010, "pop": 18801 }
+      ]
+    },
+    {
+      "state": "GA",
+      "lat": 32.9866,
+      "lon": -83.6487,
+      "population": [
+        { "year": 1900, "pop": 2220 },
+        { "year": 1910, "pop": 2618 },
+        { "year": 1920, "pop": 2926 },
+        { "year": 1930, "pop": 2910 },
+        { "year": 1940, "pop": 3119 },
+        { "year": 1950, "pop": 3445 },
+        { "year": 1960, "pop": 3943 },
+        { "year": 1970, "pop": 4588 },
+        { "year": 1980, "pop": 5463 },
+        { "year": 1990, "pop": 6478 },
+        { "year": 2000, "pop": 8187 },
+        { "year": 2010, "pop": 9688 }
+      ]
+    },
+    {
+      "state": "HI",
+      "lat": 21.1098,
+      "lon": -157.5311,
+      "population": [
+        { "year": 1900, "pop": null },
+        { "year": 1910, "pop": null },
+        { "year": 1920, "pop": null },
+        { "year": 1930, "pop": null },
+        { "year": 1940, "pop": null },
+        { "year": 1950, "pop": 500 },
+        { "year": 1960, "pop": 633 },
+        { "year": 1970, "pop": 770 },
+        { "year": 1980, "pop": 965 },
+        { "year": 1990, "pop": 1108 },
+        { "year": 2000, "pop": 1211 },
+        { "year": 2010, "pop": 1360 }
+      ]
+    },
+    {
+      "state": "IA",
+      "lat": 42.0046,
+      "lon": -93.214,
+      "population": [
+        { "year": 1900, "pop": 2231 },
+        { "year": 1910, "pop": 2228 },
+        { "year": 1920, "pop": 2400 },
+        { "year": 1930, "pop": 2475 },
+        { "year": 1940, "pop": 2537 },
+        { "year": 1950, "pop": 2621 },
+        { "year": 1960, "pop": 2758 },
+        { "year": 1970, "pop": 2825 },
+        { "year": 1980, "pop": 2914 },
+        { "year": 1990, "pop": 2777 },
+        { "year": 2000, "pop": 2927 },
+        { "year": 2010, "pop": 3046 }
+      ]
+    },
+    {
+      "state": "ID",
+      "lat": 44.2394,
+      "lon": -114.5103,
+      "population": [
+        { "year": 1900, "pop": 163 },
+        { "year": 1910, "pop": 329 },
+        { "year": 1920, "pop": 433 },
+        { "year": 1930, "pop": 447 },
+        { "year": 1940, "pop": 522 },
+        { "year": 1950, "pop": 589 },
+        { "year": 1960, "pop": 667 },
+        { "year": 1970, "pop": 713 },
+        { "year": 1980, "pop": 944 },
+        { "year": 1990, "pop": 1007 },
+        { "year": 2000, "pop": 1294 },
+        { "year": 2010, "pop": 1568 }
+      ]
+    },
+    {
+      "state": "IL",
+      "lat": 40.3363,
+      "lon": -89.0022,
+      "population": [
+        { "year": 1900, "pop": 4828 },
+        { "year": 1910, "pop": 5668 },
+        { "year": 1920, "pop": 6663 },
+        { "year": 1930, "pop": 7644 },
+        { "year": 1940, "pop": 7905 },
+        { "year": 1950, "pop": 8712 },
+        { "year": 1960, "pop": 10081 },
+        { "year": 1970, "pop": 11110 },
+        { "year": 1980, "pop": 11427 },
+        { "year": 1990, "pop": 11431 },
+        { "year": 2000, "pop": 12420 },
+        { "year": 2010, "pop": 12831 }
+      ]
+    },
+    {
+      "state": "IN",
+      "lat": 39.8647,
+      "lon": -86.2604,
+      "population": [
+        { "year": 1900, "pop": 2518 },
+        { "year": 1910, "pop": 2713 },
+        { "year": 1920, "pop": 2947 },
+        { "year": 1930, "pop": 3242 },
+        { "year": 1940, "pop": 3433 },
+        { "year": 1950, "pop": 3934 },
+        { "year": 1960, "pop": 4662 },
+        { "year": 1970, "pop": 5195 },
+        { "year": 1980, "pop": 5490 },
+        { "year": 1990, "pop": 5544 },
+        { "year": 2000, "pop": 6081 },
+        { "year": 2010, "pop": 6484 }
+      ]
+    },
+    {
+      "state": "KS",
+      "lat": 38.5111,
+      "lon": -96.8005,
+      "population": [
+        { "year": 1900, "pop": 1473 },
+        { "year": 1910, "pop": 1692 },
+        { "year": 1920, "pop": 1769 },
+        { "year": 1930, "pop": 1883 },
+        { "year": 1940, "pop": 1788 },
+        { "year": 1950, "pop": 1905 },
+        { "year": 1960, "pop": 2179 },
+        { "year": 1970, "pop": 2249 },
+        { "year": 1980, "pop": 2364 },
+        { "year": 1990, "pop": 2478 },
+        { "year": 2000, "pop": 2689 },
+        { "year": 2010, "pop": 2853 }
+      ]
+    },
+    {
+      "state": "KY",
+      "lat": 37.669,
+      "lon": -84.6514,
+      "population": [
+        { "year": 1900, "pop": 2148 },
+        { "year": 1910, "pop": 2299 },
+        { "year": 1920, "pop": 2421 },
+        { "year": 1930, "pop": 2623 },
+        { "year": 1940, "pop": 2859 },
+        { "year": 1950, "pop": 2945 },
+        { "year": 1960, "pop": 3038 },
+        { "year": 1970, "pop": 3221 },
+        { "year": 1980, "pop": 3661 },
+        { "year": 1990, "pop": 3685 },
+        { "year": 2000, "pop": 4042 },
+        { "year": 2010, "pop": 4339 }
+      ]
+    },
+    {
+      "state": "LA",
+      "lat": 31.1801,
+      "lon": -91.8749,
+      "population": [
+        { "year": 1900, "pop": 1384 },
+        { "year": 1910, "pop": 1667 },
+        { "year": 1920, "pop": 1813 },
+        { "year": 1930, "pop": 2105 },
+        { "year": 1940, "pop": 2370 },
+        { "year": 1950, "pop": 2684 },
+        { "year": 1960, "pop": 3257 },
+        { "year": 1970, "pop": 3645 },
+        { "year": 1980, "pop": 4206 },
+        { "year": 1990, "pop": 4220 },
+        { "year": 2000, "pop": 4469 },
+        { "year": 2010, "pop": 4533 }
+      ]
+    },
+    {
+      "state": "MA",
+      "lat": 42.2373,
+      "lon": -71.5314,
+      "population": [
+        { "year": 1900, "pop": 2788 },
+        { "year": 1910, "pop": 3365 },
+        { "year": 1920, "pop": 3882 },
+        { "year": 1930, "pop": 4250 },
+        { "year": 1940, "pop": 4318 },
+        { "year": 1950, "pop": 4691 },
+        { "year": 1960, "pop": 5149 },
+        { "year": 1970, "pop": 5689 },
+        { "year": 1980, "pop": 5737 },
+        { "year": 1990, "pop": 6016 },
+        { "year": 2000, "pop": 6349 },
+        { "year": 2010, "pop": 6548 }
+      ]
+    },
+    {
+      "state": "MD",
+      "lat": 39.0724,
+      "lon": -76.7902,
+      "population": [
+        { "year": 1900, "pop": 1189 },
+        { "year": 1910, "pop": 1302 },
+        { "year": 1920, "pop": 1464 },
+        { "year": 1930, "pop": 1636 },
+        { "year": 1940, "pop": 1839 },
+        { "year": 1950, "pop": 2343 },
+        { "year": 1960, "pop": 3101 },
+        { "year": 1970, "pop": 3924 },
+        { "year": 1980, "pop": 4217 },
+        { "year": 1990, "pop": 4781 },
+        { "year": 2000, "pop": 5297 },
+        { "year": 2010, "pop": 5774 }
+      ]
+    },
+    {
+      "state": "ME",
+      "lat": 44.6074,
+      "lon": -69.3977,
+      "population": [
+        { "year": 1900, "pop": 695 },
+        { "year": 1910, "pop": 745 },
+        { "year": 1920, "pop": 771 },
+        { "year": 1930, "pop": 800 },
+        { "year": 1940, "pop": 849 },
+        { "year": 1950, "pop": 914 },
+        { "year": 1960, "pop": 969 },
+        { "year": 1970, "pop": 994 },
+        { "year": 1980, "pop": 1125 },
+        { "year": 1990, "pop": 1228 },
+        { "year": 2000, "pop": 1275 },
+        { "year": 2010, "pop": 1328 }
+      ]
+    },
+    {
+      "state": "MI",
+      "lat": 43.3504,
+      "lon": -84.5603,
+      "population": [
+        { "year": 1900, "pop": 2423 },
+        { "year": 1910, "pop": 2832 },
+        { "year": 1920, "pop": 3723 },
+        { "year": 1930, "pop": 4834 },
+        { "year": 1940, "pop": 5315 },
+        { "year": 1950, "pop": 6372 },
+        { "year": 1960, "pop": 7823 },
+        { "year": 1970, "pop": 8882 },
+        { "year": 1980, "pop": 9262 },
+        { "year": 1990, "pop": 9295 },
+        { "year": 2000, "pop": 9939 },
+        { "year": 2010, "pop": 9884 }
+      ]
+    },
+    {
+      "state": "MN",
+      "lat": 45.7326,
+      "lon": -93.9196,
+      "population": [
+        { "year": 1900, "pop": 1754 },
+        { "year": 1910, "pop": 2086 },
+        { "year": 1920, "pop": 2403 },
+        { "year": 1930, "pop": 2576 },
+        { "year": 1940, "pop": 2790 },
+        { "year": 1950, "pop": 2982 },
+        { "year": 1960, "pop": 3414 },
+        { "year": 1970, "pop": 3806 },
+        { "year": 1980, "pop": 4076 },
+        { "year": 1990, "pop": 4375 },
+        { "year": 2000, "pop": 4920 },
+        { "year": 2010, "pop": 5304 }
+      ]
+    },
+    {
+      "state": "MO",
+      "lat": 38.4623,
+      "lon": -92.302,
+      "population": [
+        { "year": 1900, "pop": 3108 },
+        { "year": 1910, "pop": 3301 },
+        { "year": 1920, "pop": 3404 },
+        { "year": 1930, "pop": 3646 },
+        { "year": 1940, "pop": 3786 },
+        { "year": 1950, "pop": 3955 },
+        { "year": 1960, "pop": 4320 },
+        { "year": 1970, "pop": 4678 },
+        { "year": 1980, "pop": 4917 },
+        { "year": 1990, "pop": 5117 },
+        { "year": 2000, "pop": 5597 },
+        { "year": 2010, "pop": 5989 }
+      ]
+    },
+    {
+      "state": "MS",
+      "lat": 32.7673,
+      "lon": -89.6812,
+      "population": [
+        { "year": 1900, "pop": 1553 },
+        { "year": 1910, "pop": 1802 },
+        { "year": 1920, "pop": 1800 },
+        { "year": 1930, "pop": 2006 },
+        { "year": 1940, "pop": 2176 },
+        { "year": 1950, "pop": 2179 },
+        { "year": 1960, "pop": 2178 },
+        { "year": 1970, "pop": 2217 },
+        { "year": 1980, "pop": 2521 },
+        { "year": 1990, "pop": 2573 },
+        { "year": 2000, "pop": 2845 },
+        { "year": 2010, "pop": 2967 }
+      ]
+    },
+    {
+      "state": "MT",
+      "lat": 46.9048,
+      "lon": -110.3261,
+      "population": [
+        { "year": 1900, "pop": 245 },
+        { "year": 1910, "pop": 380 },
+        { "year": 1920, "pop": 543 },
+        { "year": 1930, "pop": 539 },
+        { "year": 1940, "pop": 558 },
+        { "year": 1950, "pop": 591 },
+        { "year": 1960, "pop": 675 },
+        { "year": 1970, "pop": 694 },
+        { "year": 1980, "pop": 787 },
+        { "year": 1990, "pop": 799 },
+        { "year": 2000, "pop": 902 },
+        { "year": 2010, "pop": 989 }
+      ]
+    },
+    {
+      "state": "NC",
+      "lat": 35.6411,
+      "lon": -79.8431,
+      "population": [
+        { "year": 1900, "pop": 1897 },
+        { "year": 1910, "pop": 2221 },
+        { "year": 1920, "pop": 2588 },
+        { "year": 1930, "pop": 3167 },
+        { "year": 1940, "pop": 3574 },
+        { "year": 1950, "pop": 4062 },
+        { "year": 1960, "pop": 4556 },
+        { "year": 1970, "pop": 5084 },
+        { "year": 1980, "pop": 5882 },
+        { "year": 1990, "pop": 6629 },
+        { "year": 2000, "pop": 8046 },
+        { "year": 2010, "pop": 9535 }
+      ]
+    },
+    {
+      "state": "ND",
+      "lat": 47.5362,
+      "lon": -99.793,
+      "population": [
+        { "year": 1900, "pop": 321 },
+        { "year": 1910, "pop": 580 },
+        { "year": 1920, "pop": 646 },
+        { "year": 1930, "pop": 682 },
+        { "year": 1940, "pop": 640 },
+        { "year": 1950, "pop": 620 },
+        { "year": 1960, "pop": 632 },
+        { "year": 1970, "pop": 618 },
+        { "year": 1980, "pop": 653 },
+        { "year": 1990, "pop": 639 },
+        { "year": 2000, "pop": 642 },
+        { "year": 2010, "pop": 673 }
+      ]
+    },
+    {
+      "state": "NE",
+      "lat": 41.1289,
+      "lon": -98.2883,
+      "population": [
+        { "year": 1900, "pop": 1067 },
+        { "year": 1910, "pop": 1198 },
+        { "year": 1920, "pop": 1300 },
+        { "year": 1930, "pop": 1380 },
+        { "year": 1940, "pop": 1316 },
+        { "year": 1950, "pop": 1326 },
+        { "year": 1960, "pop": 1411 },
+        { "year": 1970, "pop": 1485 },
+        { "year": 1980, "pop": 1570 },
+        { "year": 1990, "pop": 1578 },
+        { "year": 2000, "pop": 1711 },
+        { "year": 2010, "pop": 1826 }
+      ]
+    },
+    {
+      "state": "NH",
+      "lat": 43.4108,
+      "lon": -71.5653,
+      "population": [
+        { "year": 1900, "pop": 412 },
+        { "year": 1910, "pop": 431 },
+        { "year": 1920, "pop": 444 },
+        { "year": 1930, "pop": 466 },
+        { "year": 1940, "pop": 492 },
+        { "year": 1950, "pop": 533 },
+        { "year": 1960, "pop": 607 },
+        { "year": 1970, "pop": 738 },
+        { "year": 1980, "pop": 921 },
+        { "year": 1990, "pop": 1109 },
+        { "year": 2000, "pop": 1236 },
+        { "year": 2010, "pop": 1316 }
+      ]
+    },
+    {
+      "state": "NJ",
+      "lat": 40.314,
+      "lon": -74.5089,
+      "population": [
+        { "year": 1900, "pop": 1884 },
+        { "year": 1910, "pop": 2550 },
+        { "year": 1920, "pop": 3198 },
+        { "year": 1930, "pop": 4068 },
+        { "year": 1940, "pop": 4175 },
+        { "year": 1950, "pop": 4835 },
+        { "year": 1960, "pop": 6067 },
+        { "year": 1970, "pop": 7171 },
+        { "year": 1980, "pop": 7365 },
+        { "year": 1990, "pop": 7730 },
+        { "year": 2000, "pop": 8415 },
+        { "year": 2010, "pop": 8792 }
+      ]
+    },
+    {
+      "state": "NM",
+      "lat": 34.8375,
+      "lon": -106.2371,
+      "population": [
+        { "year": 1900, "pop": 196 },
+        { "year": 1910, "pop": 329 },
+        { "year": 1920, "pop": 363 },
+        { "year": 1930, "pop": 427 },
+        { "year": 1940, "pop": 531 },
+        { "year": 1950, "pop": 681 },
+        { "year": 1960, "pop": 951 },
+        { "year": 1970, "pop": 1017 },
+        { "year": 1980, "pop": 1303 },
+        { "year": 1990, "pop": 1515 },
+        { "year": 2000, "pop": 1819 },
+        { "year": 2010, "pop": 2059 }
+      ]
+    },
+    {
+      "state": "NV",
+      "lat": 38.4199,
+      "lon": -117.1219,
+      "population": [
+        { "year": 1900, "pop": 43 },
+        { "year": 1910, "pop": 82 },
+        { "year": 1920, "pop": 78 },
+        { "year": 1930, "pop": 92 },
+        { "year": 1940, "pop": 113 },
+        { "year": 1950, "pop": 160 },
+        { "year": 1960, "pop": 285 },
+        { "year": 1970, "pop": 489 },
+        { "year": 1980, "pop": 800 },
+        { "year": 1990, "pop": 1202 },
+        { "year": 2000, "pop": 1998 },
+        { "year": 2010, "pop": 2701 }
+      ]
+    },
+    {
+      "state": "NY",
+      "lat": 42.1497,
+      "lon": -74.9384,
+      "population": [
+        { "year": 1900, "pop": 7283 },
+        { "year": 1910, "pop": 9137 },
+        { "year": 1920, "pop": 10282 },
+        { "year": 1930, "pop": 12647 },
+        { "year": 1940, "pop": 13456 },
+        { "year": 1950, "pop": 14830 },
+        { "year": 1960, "pop": 16782 },
+        { "year": 1970, "pop": 18241 },
+        { "year": 1980, "pop": 17558 },
+        { "year": 1990, "pop": 17990 },
+        { "year": 2000, "pop": 18977 },
+        { "year": 2010, "pop": 19378 }
+      ]
+    },
+    {
+      "state": "OH",
+      "lat": 40.3736,
+      "lon": -82.7755,
+      "population": [
+        { "year": 1900, "pop": 4161 },
+        { "year": 1910, "pop": 4786 },
+        { "year": 1920, "pop": 5799 },
+        { "year": 1930, "pop": 6662 },
+        { "year": 1940, "pop": 6929 },
+        { "year": 1950, "pop": 7947 },
+        { "year": 1960, "pop": 9706 },
+        { "year": 1970, "pop": 10657 },
+        { "year": 1980, "pop": 10798 },
+        { "year": 1990, "pop": 10847 },
+        { "year": 2000, "pop": 11353 },
+        { "year": 2010, "pop": 11537 }
+      ]
+    },
+    {
+      "state": "OK",
+      "lat": 35.5376,
+      "lon": -96.9247,
+      "population": [
+        { "year": 1900, "pop": 800 },
+        { "year": 1910, "pop": 1671 },
+        { "year": 1920, "pop": 2055 },
+        { "year": 1930, "pop": 2401 },
+        { "year": 1940, "pop": 2325 },
+        { "year": 1950, "pop": 2233 },
+        { "year": 1960, "pop": 2328 },
+        { "year": 1970, "pop": 2559 },
+        { "year": 1980, "pop": 3025 },
+        { "year": 1990, "pop": 3146 },
+        { "year": 2000, "pop": 3450 },
+        { "year": 2010, "pop": 3751 }
+      ]
+    },
+    {
+      "state": "OR",
+      "lat": 44.5672,
+      "lon": -122.1269,
+      "population": [
+        { "year": 1900, "pop": 415 },
+        { "year": 1910, "pop": 677 },
+        { "year": 1920, "pop": 788 },
+        { "year": 1930, "pop": 956 },
+        { "year": 1940, "pop": 1086 },
+        { "year": 1950, "pop": 1521 },
+        { "year": 1960, "pop": 1769 },
+        { "year": 1970, "pop": 2092 },
+        { "year": 1980, "pop": 2633 },
+        { "year": 1990, "pop": 2842 },
+        { "year": 2000, "pop": 3422 },
+        { "year": 2010, "pop": 3831 }
+      ]
+    },
+    {
+      "state": "PA",
+      "lat": 40.5773,
+      "lon": -77.264,
+      "population": [
+        { "year": 1900, "pop": 6313 },
+        { "year": 1910, "pop": 7706 },
+        { "year": 1920, "pop": 8740 },
+        { "year": 1930, "pop": 9649 },
+        { "year": 1940, "pop": 9896 },
+        { "year": 1950, "pop": 10498 },
+        { "year": 1960, "pop": 11319 },
+        { "year": 1970, "pop": 11801 },
+        { "year": 1980, "pop": 11864 },
+        { "year": 1990, "pop": 11882 },
+        { "year": 2000, "pop": 12281 },
+        { "year": 2010, "pop": 12702 }
+      ]
+    },
+    {
+      "state": "RI",
+      "lat": 41.6772,
+      "lon": -71.5101,
+      "population": [
+        { "year": 1900, "pop": 430 },
+        { "year": 1910, "pop": 545 },
+        { "year": 1920, "pop": 613 },
+        { "year": 1930, "pop": 686 },
+        { "year": 1940, "pop": 719 },
+        { "year": 1950, "pop": 792 },
+        { "year": 1960, "pop": 859 },
+        { "year": 1970, "pop": 950 },
+        { "year": 1980, "pop": 947 },
+        { "year": 1990, "pop": 1003 },
+        { "year": 2000, "pop": 1048 },
+        { "year": 2010, "pop": 1053 }
+      ]
+    },
+    {
+      "state": "SC",
+      "lat": 33.8191,
+      "lon": -80.9066,
+      "population": [
+        { "year": 1900, "pop": 1342 },
+        { "year": 1910, "pop": 1523 },
+        { "year": 1920, "pop": 1685 },
+        { "year": 1930, "pop": 1745 },
+        { "year": 1940, "pop": 1902 },
+        { "year": 1950, "pop": 2117 },
+        { "year": 1960, "pop": 2383 },
+        { "year": 1970, "pop": 2591 },
+        { "year": 1980, "pop": 3122 },
+        { "year": 1990, "pop": 3487 },
+        { "year": 2000, "pop": 4012 },
+        { "year": 2010, "pop": 4625 }
+      ]
+    },
+    {
+      "state": "SD",
+      "lat": 44.2853,
+      "lon": -99.4632,
+      "population": [
+        { "year": 1900, "pop": 403 },
+        { "year": 1910, "pop": 590 },
+        { "year": 1920, "pop": 640 },
+        { "year": 1930, "pop": 693 },
+        { "year": 1940, "pop": 641 },
+        { "year": 1950, "pop": 653 },
+        { "year": 1960, "pop": 681 },
+        { "year": 1970, "pop": 666 },
+        { "year": 1980, "pop": 691 },
+        { "year": 1990, "pop": 696 },
+        { "year": 2000, "pop": 755 },
+        { "year": 2010, "pop": 814 }
+      ]
+    },
+    {
+      "state": "TN",
+      "lat": 35.7449,
+      "lon": -86.7489,
+      "population": [
+        { "year": 1900, "pop": 2023 },
+        { "year": 1910, "pop": 2191 },
+        { "year": 1920, "pop": 2329 },
+        { "year": 1930, "pop": 2619 },
+        { "year": 1940, "pop": 2935 },
+        { "year": 1950, "pop": 3292 },
+        { "year": 1960, "pop": 3567 },
+        { "year": 1970, "pop": 3926 },
+        { "year": 1980, "pop": 4591 },
+        { "year": 1990, "pop": 4877 },
+        { "year": 2000, "pop": 5689 },
+        { "year": 2010, "pop": 6346 }
+      ]
+    },
+    {
+      "state": "TX",
+      "lat": 31.106,
+      "lon": -97.6475,
+      "population": [
+        { "year": 1900, "pop": 3055 },
+        { "year": 1910, "pop": 3922 },
+        { "year": 1920, "pop": 4723 },
+        { "year": 1930, "pop": 5844 },
+        { "year": 1940, "pop": 6425 },
+        { "year": 1950, "pop": 7711 },
+        { "year": 1960, "pop": 9580 },
+        { "year": 1970, "pop": 11199 },
+        { "year": 1980, "pop": 14229 },
+        { "year": 1990, "pop": 16987 },
+        { "year": 2000, "pop": 20851 },
+        { "year": 2010, "pop": 25146 }
+      ]
+    },
+    {
+      "state": "UT",
+      "lat": 40.1135,
+      "lon": -111.8535,
+      "population": [
+        { "year": 1900, "pop": 277 },
+        { "year": 1910, "pop": 377 },
+        { "year": 1920, "pop": 453 },
+        { "year": 1930, "pop": 509 },
+        { "year": 1940, "pop": 552 },
+        { "year": 1950, "pop": 689 },
+        { "year": 1960, "pop": 891 },
+        { "year": 1970, "pop": 1059 },
+        { "year": 1980, "pop": 1461 },
+        { "year": 1990, "pop": 1723 },
+        { "year": 2000, "pop": 2233 },
+        { "year": 2010, "pop": 2764 }
+      ]
+    },
+    {
+      "state": "VA",
+      "lat": 37.768,
+      "lon": -78.2057,
+      "population": [
+        { "year": 1900, "pop": 1858 },
+        { "year": 1910, "pop": 2071 },
+        { "year": 1920, "pop": 2347 },
+        { "year": 1930, "pop": 2427 },
+        { "year": 1940, "pop": 2720 },
+        { "year": 1950, "pop": 3319 },
+        { "year": 1960, "pop": 3967 },
+        { "year": 1970, "pop": 4651 },
+        { "year": 1980, "pop": 5347 },
+        { "year": 1990, "pop": 6187 },
+        { "year": 2000, "pop": 7079 },
+        { "year": 2010, "pop": 8001 }
+      ]
+    },
+    {
+      "state": "VT",
+      "lat": 44.0407,
+      "lon": -72.7093,
+      "population": [
+        { "year": 1900, "pop": 344 },
+        { "year": 1910, "pop": 357 },
+        { "year": 1920, "pop": 353 },
+        { "year": 1930, "pop": 360 },
+        { "year": 1940, "pop": 363 },
+        { "year": 1950, "pop": 378 },
+        { "year": 1960, "pop": 390 },
+        { "year": 1970, "pop": 445 },
+        { "year": 1980, "pop": 511 },
+        { "year": 1990, "pop": 563 },
+        { "year": 2000, "pop": 609 },
+        { "year": 2010, "pop": 626 }
+      ]
+    },
+    {
+      "state": "WA",
+      "lat": 47.3917,
+      "lon": -121.5708,
+      "population": [
+        { "year": 1900, "pop": 523 },
+        { "year": 1910, "pop": 1148 },
+        { "year": 1920, "pop": 1373 },
+        { "year": 1930, "pop": 1568 },
+        { "year": 1940, "pop": 1740 },
+        { "year": 1950, "pop": 2379 },
+        { "year": 1960, "pop": 2853 },
+        { "year": 1970, "pop": 3413 },
+        { "year": 1980, "pop": 4132 },
+        { "year": 1990, "pop": 4867 },
+        { "year": 2000, "pop": 5894 },
+        { "year": 2010, "pop": 6725 }
+      ]
+    },
+    {
+      "state": "WI",
+      "lat": 44.2563,
+      "lon": -89.6385,
+      "population": [
+        { "year": 1900, "pop": 2072 },
+        { "year": 1910, "pop": 2345 },
+        { "year": 1920, "pop": 2679 },
+        { "year": 1930, "pop": 2950 },
+        { "year": 1940, "pop": 3143 },
+        { "year": 1950, "pop": 3435 },
+        { "year": 1960, "pop": 3952 },
+        { "year": 1970, "pop": 4418 },
+        { "year": 1980, "pop": 4706 },
+        { "year": 1990, "pop": 4892 },
+        { "year": 2000, "pop": 5364 },
+        { "year": 2010, "pop": 5687 }
+      ]
+    },
+    {
+      "state": "WV",
+      "lat": 38.468,
+      "lon": -80.9696,
+      "population": [
+        { "year": 1900, "pop": 959 },
+        { "year": 1910, "pop": 1231 },
+        { "year": 1920, "pop": 1470 },
+        { "year": 1930, "pop": 1733 },
+        { "year": 1940, "pop": 1907 },
+        { "year": 1950, "pop": 2006 },
+        { "year": 1960, "pop": 1860 },
+        { "year": 1970, "pop": 1744 },
+        { "year": 1980, "pop": 1950 },
+        { "year": 1990, "pop": 1793 },
+        { "year": 2000, "pop": 1808 },
+        { "year": 2010, "pop": 1853 }
+      ]
+    },
+    {
+      "state": "WY",
+      "lat": 42.7475,
+      "lon": -107.2085,
+      "population": [
+        { "year": 1900, "pop": 93 },
+        { "year": 1910, "pop": 147 },
+        { "year": 1920, "pop": 197 },
+        { "year": 1930, "pop": 226 },
+        { "year": 1940, "pop": 250 },
+        { "year": 1950, "pop": 291 },
+        { "year": 1960, "pop": 330 },
+        { "year": 1970, "pop": 332 },
+        { "year": 1980, "pop": 470 },
+        { "year": 1990, "pop": 454 },
+        { "year": 2000, "pop": 494 },
+        { "year": 2010, "pop": 564 }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "WA",
+      "target": "OR"
+    },
+    {
+      "source": "WA",
+      "target": "ID"
+    },
+    {
+      "source": "OR",
+      "target": "ID"
+    },
+    {
+      "source": "OR",
+      "target": "CA"
+    },
+    {
+      "source": "OR",
+      "target": "NV"
+    },
+    {
+      "source": "CA",
+      "target": "NV"
+    },
+    {
+      "source": "CA",
+      "target": "AZ"
+    },
+    {
+      "source": "NV",
+      "target": "AZ"
+    },
+    {
+      "source": "ID",
+      "target": "NV"
+    },
+    {
+      "source": "ID",
+      "target": "UT"
+    },
+    {
+      "source": "UT",
+      "target": "AZ"
+    },
+    {
+      "source": "NV",
+      "target": "UT"
+    },
+    {
+      "source": "AZ",
+      "target": "NM"
+    },
+    {
+      "source": "UT",
+      "target": "CO"
+    },
+    {
+      "source": "UT",
+      "target": "WY"
+    },
+    {
+      "source": "ID",
+      "target": "WY"
+    },
+    {
+      "source": "ID",
+      "target": "MT"
+    },
+    {
+      "source": "MT",
+      "target": "WY"
+    },
+    {
+      "source": "WY",
+      "target": "CO"
+    },
+    {
+      "source": "CO",
+      "target": "NM"
+    },
+    {
+      "source": "NM",
+      "target": "TX"
+    },
+    {
+      "source": "NM",
+      "target": "OK"
+    },
+    {
+      "source": "CO",
+      "target": "OK"
+    },
+    {
+      "source": "CO",
+      "target": "KS"
+    },
+    {
+      "source": "CO",
+      "target": "NE"
+    },
+    {
+      "source": "WY",
+      "target": "NE"
+    },
+    {
+      "source": "WY",
+      "target": "SD"
+    },
+    {
+      "source": "MT",
+      "target": "SD"
+    },
+    {
+      "source": "MT",
+      "target": "ND"
+    },
+    {
+      "source": "ND",
+      "target": "SD"
+    },
+    {
+      "source": "SD",
+      "target": "NE"
+    },
+    {
+      "source": "NE",
+      "target": "KS"
+    },
+    {
+      "source": "KS",
+      "target": "OK"
+    },
+    {
+      "source": "OK",
+      "target": "TX"
+    },
+    {
+      "source": "TX",
+      "target": "LA"
+    },
+    {
+      "source": "TX",
+      "target": "AR"
+    },
+    {
+      "source": "OK",
+      "target": "AR"
+    },
+    {
+      "source": "OK",
+      "target": "MO"
+    },
+    {
+      "source": "KS",
+      "target": "MO"
+    },
+    {
+      "source": "NE",
+      "target": "MO"
+    },
+    {
+      "source": "NE",
+      "target": "IA"
+    },
+    {
+      "source": "SD",
+      "target": "IA"
+    },
+    {
+      "source": "SD",
+      "target": "MN"
+    },
+    {
+      "source": "ND",
+      "target": "MN"
+    },
+    {
+      "source": "MN",
+      "target": "IA"
+    },
+    {
+      "source": "IA",
+      "target": "MO"
+    },
+    {
+      "source": "MO",
+      "target": "AR"
+    },
+    {
+      "source": "AR",
+      "target": "LA"
+    },
+    {
+      "source": "LA",
+      "target": "MS"
+    },
+    {
+      "source": "AR",
+      "target": "MS"
+    },
+    {
+      "source": "AR",
+      "target": "TN"
+    },
+    {
+      "source": "MS",
+      "target": "TN"
+    },
+    {
+      "source": "MS",
+      "target": "KY"
+    },
+    {
+      "source": "MS",
+      "target": "IL"
+    },
+    {
+      "source": "IL",
+      "target": "KY"
+    },
+    {
+      "source": "IA",
+      "target": "IL"
+    },
+    {
+      "source": "IA",
+      "target": "WI"
+    },
+    {
+      "source": "MN",
+      "target": "WI"
+    },
+    {
+      "source": "WI",
+      "target": "IL"
+    },
+    {
+      "source": "IL",
+      "target": "IN"
+    },
+    {
+      "source": "IN",
+      "target": "KY"
+    },
+    {
+      "source": "KY",
+      "target": "TN"
+    },
+    {
+      "source": "TN",
+      "target": "AL"
+    },
+    {
+      "source": "MS",
+      "target": "AL"
+    },
+    {
+      "source": "AL",
+      "target": "FL"
+    },
+    {
+      "source": "FL",
+      "target": "GA"
+    },
+    {
+      "source": "AL",
+      "target": "GA"
+    },
+    {
+      "source": "TN",
+      "target": "GA"
+    },
+    {
+      "source": "GA",
+      "target": "SC"
+    },
+    {
+      "source": "GA",
+      "target": "NC"
+    },
+    {
+      "source": "SC",
+      "target": "NC"
+    },
+    {
+      "source": "TN",
+      "target": "NC"
+    },
+    {
+      "source": "TN",
+      "target": "VA"
+    },
+    {
+      "source": "NC",
+      "target": "VA"
+    },
+    {
+      "source": "VA",
+      "target": "KY"
+    },
+    {
+      "source": "MI",
+      "target": "IN"
+    },
+    {
+      "source": "MI",
+      "target": "OH"
+    },
+    {
+      "source": "OH",
+      "target": "KY"
+    },
+    {
+      "source": "OH",
+      "target": "WV"
+    },
+    {
+      "source": "KY",
+      "target": "WV"
+    },
+    {
+      "source": "VA",
+      "target": "WV"
+    },
+    {
+      "source": "VA",
+      "target": "DC"
+    },
+    {
+      "source": "DC",
+      "target": "MD"
+    },
+    {
+      "source": "MD",
+      "target": "VA"
+    },
+    {
+      "source": "OH",
+      "target": "PA"
+    },
+    {
+      "source": "PA",
+      "target": "WV"
+    },
+    {
+      "source": "PA",
+      "target": "MD"
+    },
+    {
+      "source": "MD",
+      "target": "DE"
+    },
+    {
+      "source": "DE",
+      "target": "PA"
+    },
+    {
+      "source": "DE",
+      "target": "NJ"
+    },
+    {
+      "source": "PA",
+      "target": "NJ"
+    },
+    {
+      "source": "PA",
+      "target": "NY"
+    },
+    {
+      "source": "NJ",
+      "target": "NY"
+    },
+    {
+      "source": "NY",
+      "target": "CT"
+    },
+    {
+      "source": "CT",
+      "target": "RI"
+    },
+    {
+      "source": "CT",
+      "target": "MA"
+    },
+    {
+      "source": "RI",
+      "target": "MA"
+    },
+    {
+      "source": "NY",
+      "target": "MA"
+    },
+    {
+      "source": "NY",
+      "target": "VT"
+    },
+    {
+      "source": "VT",
+      "target": "NH"
+    },
+    {
+      "source": "MA",
+      "target": "VT"
+    },
+    {
+      "source": "MA",
+      "target": "NH"
+    },
+    {
+      "source": "NH",
+      "target": "ME"
+    }
+  ]
+}
