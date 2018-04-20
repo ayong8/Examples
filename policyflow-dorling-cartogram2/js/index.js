@@ -1,22 +1,34 @@
-var margin = {top: 0, right: 0, bottom: 0, left: 0},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
-	padding = 2,
-	view = [width/2, height/2, height/2],
-    zoomMargin = 30;
+var layout = {
+	margin: {
+		top: 0, 
+		right: 0, 
+		bottom: 0, 
+		left: 0
+	},
+    width: 960,
+    height: 500,
+	padding: 2,
+    zoomMargin: 30
+}
+
+var view = [ 
+	layout.width/2, 
+	layout.height/2, 
+	layout.height/2
+];
 
 var projection = d3.geo.albersUsa();
 
 var force = d3.layout.force()
     .charge(0)
     .gravity(0)
-    .size([width, height]);
+    .size([layout.width, layout.height]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", layout.width + layout.margin.left + layout.margin.right)
+    .attr("height", layout.height + layout.margin.top + layout.margin.bottom)
   	.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	.attr("transform", "translate(" + layout.margin.left + "," + layout.margin.top + ")");
 
 var tip = d4.tip()
     .attr("class", "d3-tip")
@@ -26,71 +38,92 @@ var tip = d4.tip()
       return d.parent? ("Policy_id" + ": " + d.data.policy)
                 : ("State: " + d.data.name);
     });
-var policyCircleScale, stateCircleScale,
-    stateInfScale,
-    rootNodes = [];
 
+var scale = {
+	adoptionScoreScale: d4.scaleQuantile(),
+	policyCircleScale: d4.scaleLinear(),   // changes over time
+	policyColorScale: d4.scaleLinear()     // constant over time
+    			.range(["yellow","#f00"])
+    			.domain([0, 5]),
+	stateCircleScale: d4.scaleLinear().range([10, 40]),
+	stateColorScale: d4.scaleLinear()  // state circle color depends on state's influence score
+            .range(["#fffea4","#df0000"])
+            .domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+	stateInfStrokeScale: d4.scaleLinear()
+    		.range([1, 4])
+    		.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+	stateInfRadiusScale: d4.scaleLinear()
+    		.range([1, 1.2])
+    		.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+	stateManyAdoptionPolicyRadiusScale: d4.scaleLinear(),
+	stateInfScale: ""
+}
+var threshold = {
+	policyCircle: { 
+		max: 5,
+		min: 3,
+		ratio: 2
+	},
+	setPolicyCircle: function(yearUntil){
+		if (yearUntil <= 1850) {
+			this.policyCircle.max = 6;
+			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
+		}
+		if (yearUntil <= 1880 && yearUntil >= 1850) {
+			this.policyCircle.max = 4;
+			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
+		}
+	}
+}
+
+function setScale(opt){
+	return opt.scale
+		.domain(opt.domain)
+		.range(opt.range);
+}
+
+var rootNodes = [];
 var projection = d3.geo.albersUsa();
 
-adoptionScoreScale = d4.scaleQuantile()
-    .range([5, 13]);
-policyCircleScale = d4.scaleLinear();   // changes over time
-policyColorScale = d4.scaleLinear()     // constant over time
-    .range(["yellow","#f00"])
-    .domain([0, 5]);
-stateCircleScale = d4.scaleLinear().range([10, 40]);
-stateColorScale = d4.scaleLinear()  // state circle color depends on state's influence score
-            .range(["#fffea4","#df0000"])
-            .domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; })));
-stateInfStrokeScale = d4.scaleLinear()
-    .range([1, 4])
-    .domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; })));
-stateInfRadiusScale = d4.scaleLinear()
-    .range([1, 1.2])
-    .domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; })));
-stateManyAdoptionPolicyRadiusScale = d4.scaleLinear()
-	.range([1, 2])
-
-var dataset;
-var statesInHierarchy;
-d3.json("./data/us-state-centroids.json", function(error, states) {
-	if (error) throw error;
-	
-	d3.csv("./data/policy_adoptions.csv")
-	.row(function(d) {
-		return {
-			policy: d.policy_id,
-			lat: parseFloat(d.lat),
-			lng: parseFloat(d.long),
-			name: d.state,
-			state_name: d.state_name,
-			value: d.adoption_case,
-			adopted_year: new Date(d.adopted_year)
-		};
-	})
-	.get(function(err, rows) {
-		if (err) return console.error(err);
-		dataset = rows;
-	});
-
-	var gStates; 
-	var dataGroupByStateUntilYear;
-
-	svg.call(tip);
-	var update = function(dataUntilYear, yearUntil){
-
-		svg.selectAll("circle").remove();
+var model = {
+	data: "",
+	filterByYear: function(year){
+		var filteredData; 
 		
-		var policyThreshold;
+		filteredData = _(this.data).filter(function(adoption) {
+			var adoptedYear;
+			adoptedYear = adoption.adopted_year.getYear() + 1900;
+			return adoptedYear < year;
+		});
 	
-		//*** Adjust yearly scale of the size of policy circle from given data
-		adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil);
-
-		dataGroupByStateUntilYear = _.groupBy(dataUntilYear, 'name');
-		// Object.keys(dataGroupByStateUntilYear).forEach(function(state){
-		//     allAdoptions.concat(dataGroupByStateUntilYear[state].adopted_cases);
-		// });
-
+		return filteredData;
+	},
+	groupBy: function(opt){
+		return _.groupBy(opt.data, opt.groupBy);
+	},
+	calculateAdoptionScores: function(dataUntilYear){
+		return dataUntilYear.map(function(adoption){
+			// (radius of policy circle) = (# of adoption cases) x (first adoption year / state's adopted year)
+			var adoptionCases,  // # of states that adopted this policy
+				manyAdoptionScore,
+				earlyAdoptionScore,
+				policyScore,
+				firstAdoptionYear = static.policyStartYear[adoption.policy]["policy_start"],
+				stateAdoptionYear = adoption.adopted_year.getFullYear();
+			
+			// Count the number of states that adopted this policy
+			adoptionCases = dataUntilYear.filter(function(d){
+					return (d.policy === adoption.policy) && 
+						(d.adopted_year < stateAdoptionYear);
+				}); 
+			
+			manyAdoptionScore = adoptionCases.length+1;
+			earlyAdoptionScore = Math.round(Math.pow((firstAdoptionYear-1650) / (stateAdoptionYear-1650), 10), 1);
+	
+			return Object.assign(adoption, { "manyAdoptionScore": manyAdoptionScore, "earlyAdoptionScore": earlyAdoptionScore });
+		});
+	},
+	mapStateProperties: function(dataGroupByStateUntilYear){	
 		dataGroupByStateUntilYear = Object.keys(dataGroupByStateUntilYear).map(function(state, id){
 			var state_obj = {};
 			var lat = dataGroupByStateUntilYear[state][0].lat,
@@ -98,10 +131,10 @@ d3.json("./data/us-state-centroids.json", function(error, states) {
 				permalink = dataGroupByStateUntilYear[state][0].permalink,
 				adoptions = dataGroupByStateUntilYear[state];
 			
-			adoptions.forEach(function(adoption){ 
-				adoption.value = adoption.value; 
-			});	
-
+			// adoptions.forEach(function(adoption){ 
+			// 	adoption.value = adoption.value; 
+			// });	
+	
 			return { 
 				name: state, 
 				lat: lat, 
@@ -111,23 +144,22 @@ d3.json("./data/us-state-centroids.json", function(error, states) {
 			};
 		});
 
-		// Define each state as root
-		// Convert each state key to an object with functions and properties for hierarchical structure
-		statesInHierarchy = dataGroupByStateUntilYear.map(function(state) {
+		return dataGroupByStateUntilYear;
+	},
+	setHierarchy: function(dataGroupByStateUntilYear){
+		var _self = this;
+		dataGroupByStateUntilYear.map(function(state) {
 			var stateHierarchy,
 				numAdoptedPolicies,
 				point = projection([state.lng, state.lat]);
 			
 			stateHierarchy = d4.hierarchy(state);
 			numAdoptedPolicies = stateHierarchy.children.length;
+			console.log("before hier: ", numAdoptedPolicies);
 
-			if(stateHierarchy.children.length > 20) { 
-				stateHierarchy.children = stateHierarchy.children.slice(0, 19); 
-			}
-
-			stateHierarchy
+			_self.setNumPolicyThreshold(stateHierarchy)
 				.sum(function(d){ 
-					return policyCircleScale(d.value); 
+					return scale.policyCircleScale(d.value); 
 				});
 
 			var rootSize = stateHierarchy.value,
@@ -148,340 +180,340 @@ d3.json("./data/us-state-centroids.json", function(error, states) {
 			})        
 			return stateHierarchy;      
 		});
-
-		// Scale by the number of adopted policies 
-		stateManyAdoptionPolicyRadiusScale
-			.domain(d4.extent(statesInHierarchy, function(state) { return state.children.length; }));
-
-		gStates = svg.selectAll(".g_state")
-			.data(statesInHierarchy);
-
-		gStates.enter().append("g")
-			.attr("class", function(d){
-				return "g_state g_state_" + d.id;
-			});
-
-		gStates.exit().remove();
-
-		var circlesData = gStates.selectAll(".circle")
-			.data(function(d){ return d.nodes; });
-
-		circlesData.enter().append("circle")
-			.attr("class", function(d) { 
-				return d.parent ? ("circle circle_policy circle_policy_" + d.data.name) 
-								: ("circle outer_circle_state outer_circle_state_" + d.data.name); 
-			})
-			.style("fill", function(d){
-				var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-				if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					
-				}
-				return d.parent? policyColorScale(d.r) : "white";
-			})
-
-		circlesData
-			.transition().duration(400)
-			.style("fill", function(d){
-				var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-				if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					
-				}
-				return d.parent? policyColorScale(d.r) : "white";
-			})
-			.attr("r", function(d){
-				// If it's outer state circle, save the radius to "innerCircleRadius"
-				// because the whole policy circles should transform in x and y by the radius
-				if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					var statePageRank, numAdoptedPolicies,
-						innerCircleRadius, innerCircleRadiusOffset, outerCircleRadius;
-
-					statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-					numAdoptedPolicies = d.numAdoptedPolicies;
-					innerCircleRadiusOffset = d.r;
-					innerCircleRadius = d.r;
-					outerCircleRadius = innerCircleRadius * stateInfRadiusScale(statePageRank) * stateManyAdoptionPolicyRadiusScale(numAdoptedPolicies);
-					if(outerCircleRadius <= 3)
-						outerCircleRadius = 5;
-					return outerCircleRadius;
-				}
-				var policyCircleRadius = d.r;
-				if (policyCircleRadius <= 3)
-					policyCircleRadius = 3;
-				return policyCircleRadius;
-			})
-			.attr("cx", function(d){
-				var stateCircle, innerCircleRadiusOffset;
-
-				if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					// stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-					// innerCircleRadiusOffset = stateCircle.attr("r");
-					innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-
-					return d.x - innerCircleRadiusOffset;
-				}
-				//return d.x;
-				//return d.x - innerCircleRadiusOffset*2;
-			})
-			.attr("cy", function(d){
-				var stateCircle, innerCircleRadiusOffset;
-				
-				if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					//stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-					innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-					return d.y - innerCircleRadiusOffset;
-				}
-				//return d.y;
-				//return d.y - innerCircleRadiusOffset*2;
-			})
-			.style("stroke", function(d){
-				var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-				if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					
-				}
-				return d.parent? "gray" : stateColorScale(statePageRank);
-			})
-			.style("stroke-width", function(d){
-				var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-				return d.parent? 0.5 : 2 * stateInfStrokeScale(statePageRank)
-			});
-			
-		
-		circlesData.exit()
-			.remove();
-
-		gStates.selectAll(".inner_circle_state")
-			.attr("cx", function(d){
-				var stateCircle, innerCircleRadiusOffset;
-
-				if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					// stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-					// innerCircleRadiusOffset = stateCircle.attr("r");
-					innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-
-					return d.x - innerCircleRadiusOffset;
-				}
-			})
-			.attr("cy", function(d){
-				var stateCircle, innerCircleRadiusOffset;
-				
-				if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-					//stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-					innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-					console.log(d.y - innerCircleRadiusOffset*10, d.y - innerCircleRadiusOffset, d.y, innerCircleRadiusOffset);
-					return d.y - innerCircleRadiusOffset;
-				}
-			});
-
-		force
-			.nodes(statesInHierarchy)
-			.on("tick", tick)
-			.alpha(1)
-			.start();
-
-		d4.selectAll(".circle")
-			.on("mouseover", function(d){
-				console.log("coming in")
-				tip.show(d);
-			})
-			.on("mouseout", function(d){
-				tip.hide(d);
-			});
-
-		// outerCircle = gStates.selectAll(".outer_circle_state")
-		// 		.style("fill", stateColorScale(statePageRank));
-
-		// d4.selectAll(".g_state")
-		// 	.insert("circle", ".outer_circle_state + *")
-		// 	.attr("class", "inner_circle_state")
-		// 	.attr("cx", function(d){ 
-		// 		return d4.select(this.parentNode).select(".outer_circle_state").data()[0].x; })
-		// 	.attr("cy", function(d){ return d4.select(this.parentNode).select(".outer_circle_state").data()[0].y; })
-		// 	.attr("r", function(d){ 
-		// 		var innerCircleRadius = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-		// 		return innerCircleRadius; 
-		// 	});
-
-		// d4.selectAll(".g_state").each(function(d){
-		// 	var gState = d4.select(this);
-		// 	console.log(gState);
-
-		// 	outerCircle = gState.select(".outer_circle_state");
-		// 	outerCircleData = outerCircle.data()[0];
-
-		// 	gState.insert("circle", ".outer_circle_state + *") 
-		// 		.attr("class", "inner_circle_state")
-		// 		.attr("cx", function(d){ return outerCircleData.x; })
-		// 		.attr("cy", function(d){ return outerCircleData.y; })
-		// 		.attr("r", function(d){ return outerCircleData.r; });
-        //     // innerCircle = gState.selectAll(".inner_circle_state")
-		// 	// 		.data([ d ]);
-			
-            
-        //     // innerCircle
-        //     //     .enter().insert("circle", ".outer_circle_state + *")    // Put inner circle right after outer circle
-        //     //     .attr("class", "inner_circle_state")
-        //     //     .attr("cx", function(d){ return outerCircleData.x; })
-        //     //     .attr("cy", function(d){ return outerCircleData.y; })
-        //     //     .attr("r", function(d){ return outerCircleData.r; });
-            
-        //     // innerCircle.transition().duration(400)
-        //     //     .attr("cx", function(d){ return outerCircleData.x; })
-        //     //     .attr("cy", function(d){ return outerCircleData.y; })
-        //     //     .attr("r", function(d){ return outerCircleData.r; });
-            
-        //     // innerCircle.exit()
-        //     //     .remove();
-		// })
-	}
-	svg.on("click", function() { zoom([width/2-10, height/2-10, height/2]); });
-
-	//*** Functions ***/
-    function adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil){
-        var policyCircleMin, policyCircleMax;
-
-        //*** Calculate manyAdoptionScore, and earlyAdoptionScore
-        // # of cumulative adoption cases for each policy
-        // i.g., How many states adopted the policy by the given year
-        // Output: array of adoption object itself... 
-        // # of adoption cases will be the size of policy circle
-        dataUntilYear.map(function(adoption){
-            // (radius of policy circle) = (# of adoption cases) x (first adoption year / state's adopted year)
-            var adoptionCases,  // # of states that adopted this policy
-                manyAdoptionScore,
-                earlyAdoptionScore,
-                policyScore,
-                firstAdoptionYear = static.policyStartYear[adoption.policy]["policy_start"],
-                stateAdoptionYear = adoption.adopted_year.getFullYear();
-            
-            // Count the number of states that adopted this policy
-            adoptionCases = dataUntilYear.filter(function(d){
-                    return (d.policy === adoption.policy) && 
-                        (d.adopted_year < stateAdoptionYear);
-                }); 
-            
-            manyAdoptionScore = adoptionCases.length+1;
-            earlyAdoptionScore = Math.round(Math.pow((firstAdoptionYear-1650) / (stateAdoptionYear-1650), 10), 1);
-
-            return Object.assign(adoption, { "manyAdoptionScore": manyAdoptionScore, "earlyAdoptionScore": earlyAdoptionScore });
-        });
-
-        // Define the scale of adoptionScoreScale based on scores
-        adoptionScoreScale.domain(d4.extent(dataUntilYear, function(d){ return d.manyAdoptionScore; }));
-        // Assign final score (manyAdoptionScore * earlyAdoptionScore) in the d.value
-        dataUntilYear.map(function(adoption){
-            return Object.assign(adoption, { "value": adoptionScoreScale(adoption.manyAdoptionScore) * adoption.earlyAdoptionScore });
-        });
-
-        // Define the scale of policy circle based on the final score
-        policyCircleMax = 3;
-		policyCircleMin = policyCircleMax / 3;
-		if (yearUntil <= 1850) {
-			policyCircleMax = 6;
-			policyCircleMin = policyCircleMax / 2;
+		return dataGroupByStateUntilYear;
+	},
+	setNumPolicyThreshold: function(stateHierarchy){
+		if(stateHierarchy.children.length > 20) { 
+			stateHierarchy.children = stateHierarchy.children.slice(0, 19); 
 		}
-		if (yearUntil <= 1880 && yearUntil >= 1850) {
-			policyCircleMax = 4;
-			policyCircleMin = policyCircleMax / 2;
-		}
-        policyCircleScale
-            .range([policyCircleMin, policyCircleMax])
-            .domain(d4.extent(dataUntilYear.map(function(d){ return d.value; })));
-    }
 
-    function zoom(d) {
-        var focus0 = focus; focus = d;
-    
-        var transition = d3.transition()
-            .duration(d3.event.altKey ? 7500 : 750)
-            .tween("zoom", function(d) {
-                var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + zoomMargin]);
-                return function(t) {
-                    zoomTo(i(t)); 
-                };
-            });
-      }
-    
-    function zoomTo(v) {
-        var diameter = height,
-            k = diameter / v[2],
-            view = v;
-        if(isNaN(v[0])){
-            svg.transition().attr("transform", "translate(0,0)")
-        } else {
-            svg.attr("transform", "translate(" + width/2 + "," + height/2 + ")scale(" + k + ")translate(" + -v[0] + "," + -v[1] + ")")
-        }
-    }
-
-	function tick(e) {
-		gStates.each(gravity(e.alpha * .1))
-			.each(collide(.1))
-			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		return stateHierarchy;
 	}
+}
 
-	function gravity(k) {
-		return function(d) {
-			d.x += (d.x0 - d.x) * k;
-			d.y += (d.y0 - d.y) * k;
-		};
-	}
-
-	function collide(k) {
-		var q = d3.geom.quadtree(statesInHierarchy);
-		
-		return function(node) {
-			var gNode = svg.selectAll(".g_state")
-					.filter(function(d){
-						return d.id == node.id;
-					})
-			var nodeSize = gNode.node().getBBox().height + 5;
-			var nr = nodeSize/1.5 + padding,
-				nx1 = node.x - nr,
-				nx2 = node.x + nr,
-				ny1 = node.y - nr,
-				ny2 = node.y + nr;
-			q.visit(function(quad, x1, y1, x2, y2) {
-			if (quad.point && (quad.point !== node)) {
-				var x = node.x - quad.point.x,
-					y = node.y - quad.point.y,
-					l = x * x + y * y,
-					r = nr + quad.point.r;
-				if (l < r * r) {
-				l = ((l = Math.sqrt(l)) - r) / l * k;
-				node.x -= x *= l;
-				node.y -= y *= l;
-				quad.point.x += x;
-				quad.point.y += y;
-				}
-			}
-			return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-			});
-		};
-	}
-
-  //*** For slider ***/
-  var minDateUnix = new Date('1800-01-01').getFullYear();
-  var maxDateUnix = new Date('2017-12-31').getFullYear();
-  var step = 60*60*24;
-
-  d3.select('#slider3').call(d3.slider()
-      .axis(true).min(minDateUnix).max(maxDateUnix)
-      .on("slide", function(evt, value) {
-			var newValue = value;
-			d3.select("#current_year").transition()
-				.tween("text", function(d) {
-					var self = this;
-					var i = d3.interpolateRound(Math.floor(d3.select(this).text()), Math.floor(newValue));
-					return function(t) {
-						d3.select(this).text(i(t));
-					};
-				});
-			var newData = _(dataset).filter( function(site) {
-				var adopted_year = site.adopted_year.getYear() + 1900;
-				return adopted_year < value;
-			})
-      
-        	update(newData, newValue);
-      })
-  );
+//***** Load data *****/
+d3.csv("./data/policy_adoptions.csv")
+.row(function(d) {
+	return {
+		policy: d.policy_id,
+		lat: parseFloat(d.lat),
+		lng: parseFloat(d.long),
+		name: d.state,
+		state_name: d.state_name,
+		value: d.adoption_case,
+		adopted_year: new Date(d.adopted_year)
+	};
+})
+.get(function(err, rows) {
+	if (err) return console.error(err);
+	model.data = rows;
 });
+
+svg.call(tip);
+
+var statesInHierarchy, dataGroupByStateUntilYear;
+var gStates, circlesData;
+
+var update = function(dataUntilYear, yearUntil){
+	svg.selectAll("circle").remove();
+	
+	var policyThreshold;
+
+	//*** Adjust yearly scale of the size of policy circle from given data
+	adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil);
+	// Group by state
+	dataGroupByStateUntilYear = model.groupBy({
+									data: dataUntilYear, 
+									groupBy: 'name' 
+								})
+	dataGroupByStateUntilYear = model.mapStateProperties(dataGroupByStateUntilYear);
+	// Define each state as root
+	// Convert each state key to an object with functions and properties for hierarchical structure
+	statesInHierarchy = model.setHierarchy(dataGroupByStateUntilYear);
+
+	// Scale by the number of adopted policies 
+	setScale({
+		scale: scale.stateManyAdoptionPolicyRadiusScale,
+		domain: d4.extent(statesInHierarchy, function(state) { 
+			return state.children.length; 
+		}),
+		range: [1, 2]
+	})
+
+	//***** Set group elements *****//
+	gStates = svg.selectAll(".g_state")
+		.data(statesInHierarchy);
+	gStates
+		.enter().append("g")
+		.attr("class", function(d){
+			return "g_state g_state_" + d.id;
+		});
+	gStates
+		.exit().remove();
+
+	//***** Set circle elements *****//
+	circlesData = gStates.selectAll(".circle")
+		.data(function(d){ 
+			return d.nodes; 
+		});
+
+	circlesData
+		.enter().append("circle")
+		.attr("class", function(d) { 
+			return d.parent ? ("circle circle_policy circle_policy_" + d.data.name) 
+							: ("circle outer_circle_state outer_circle_state_" + d.data.name); 
+		})
+		.style("fill", function(d){
+			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				
+			}
+			return d.parent? scale.policyColorScale(d.r) : "white";
+		})
+
+	circlesData
+		.transition().duration(400)
+		.style("fill", function(d){
+			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				
+			}
+			return d.parent? scale.policyColorScale(d.r) : "white";
+		})
+		.attr("r", function(d){
+			// If it's outer state circle, save the radius to "innerCircleRadius"
+			// because the whole policy circles should transform in x and y by the radius
+			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				var statePageRank, numAdoptedPolicies,
+					innerCircleRadius, innerCircleRadiusOffset, 
+					outerCircleRadius, policyCircleRadius;
+
+				statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+				numAdoptedPolicies = d.numAdoptedPolicies;
+				innerCircleRadiusOffset = d.r;
+				innerCircleRadius = d.r;
+				outerCircleRadius = innerCircleRadius * scale.stateInfRadiusScale(statePageRank) * scale.stateManyAdoptionPolicyRadiusScale(numAdoptedPolicies);
+				
+				if(outerCircleRadius <= 3)
+					outerCircleRadius = 5;
+
+				return outerCircleRadius;
+			}
+			policyCircleRadius = d.r;
+
+			if (policyCircleRadius <= 3)
+				policyCircleRadius = 3;
+
+			return policyCircleRadius;
+		})
+		.attr("cx", function(d){
+			var stateCircle, innerCircleRadiusOffset;
+
+			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				innerCircleRadiusOffset = d4.select(this.parentNode)
+								.select(".outer_circle_state")
+								.data()[0].r;
+
+				return d.x - innerCircleRadiusOffset;
+			}
+		})
+		.attr("cy", function(d){
+			var stateCircle, innerCircleRadiusOffset;
+			
+			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				innerCircleRadiusOffset = d4.select(this.parentNode)
+								.select(".outer_circle_state")
+								.data()[0].r;
+
+				return d.y - innerCircleRadiusOffset;
+			}
+			//return d.y;
+			//return d.y - innerCircleRadiusOffset*2;
+		})
+		.style("stroke", function(d){
+			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				
+			}
+			return d.parent? "gray" : scale.stateColorScale(statePageRank);
+		})
+		.style("stroke-width", function(d){
+			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			return d.parent? 0.5 : 2 * scale.stateInfStrokeScale(statePageRank)
+		});
+		
+	
+	circlesData.exit()
+		.remove();
+
+	gStates.selectAll(".inner_circle_state")
+		.attr("cx", function(d){
+			var stateCircle, innerCircleRadiusOffset;
+
+			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				// stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
+				// innerCircleRadiusOffset = stateCircle.attr("r");
+				innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
+
+				return d.x - innerCircleRadiusOffset;
+			}
+		})
+		.attr("cy", function(d){
+			var stateCircle, innerCircleRadiusOffset;
+			
+			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
+				//stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
+				innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
+				console.log(d.y - innerCircleRadiusOffset*10, d.y - innerCircleRadiusOffset, d.y, innerCircleRadiusOffset);
+				return d.y - innerCircleRadiusOffset;
+			}
+		});
+
+	force
+		.nodes(statesInHierarchy)
+		.on("tick", tick)
+		.alpha(1)
+		.start();
+
+	d4.selectAll(".circle")
+		.on("mouseover", function(d){
+			console.log("coming in")
+			tip.show(d);
+		})
+		.on("mouseout", function(d){
+			tip.hide(d);
+		});
+}
+svg.on("click", function() { zoom([width/2-10, height/2-10, height/2]); });
+
+//*** Functions ***/
+function adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil){
+	//*** Calculate manyAdoptionScore, and earlyAdoptionScore
+	// # of cumulative adoption cases for each policy
+	// i.g., How many states adopted the policy by the given year
+	// Output: array of adoption object itself... 
+	// # of adoption cases will be the size of policy circle
+	dataUntilYear = model.calculateAdoptionScores(dataUntilYear);
+
+	// Define the scale of adoptionScoreScale based on scores
+	setScale({ 
+		scale: scale.adoptionScoreScale, 
+		domain: d4.extent(dataUntilYear, function(d){ 
+			return d.manyAdoptionScore; 
+		}),
+		range: [5, 13]
+	});
+
+	// Assign final score (manyAdoptionScore * earlyAdoptionScore) in the d.value
+	dataUntilYear.map(function(adoption){
+		return Object.assign(adoption, { "value": scale.adoptionScoreScale(adoption.manyAdoptionScore) * adoption.earlyAdoptionScore });
+	});
+
+	// Define the scale of policy circle based on the final score
+	threshold.setPolicyCircle(yearUntil);
+
+	// Scale policy circles based on year-based threshold
+	setScale({ 
+		scale: scale.policyCircleScale, 
+		domain: d4.extent(dataUntilYear.map(function(d){ 
+			return d.value; 
+		})),
+		range: [threshold.policyCircle.min, threshold.policyCircle.max]
+	});
+}
+
+function zoom(d) {
+	var focus0 = focus; focus = d;
+
+	var transition = d3.transition()
+		.duration(d3.event.altKey ? 7500 : 750)
+		.tween("zoom", function(d) {
+			var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + zoomMargin]);
+			return function(t) {
+				zoomTo(i(t)); 
+			};
+		});
+	}
+
+function zoomTo(v) {
+	var diameter = height,
+		k = diameter / v[2],
+		view = v;
+	if(isNaN(v[0])){
+		svg.transition().attr("transform", "translate(0,0)")
+	} else {
+		svg.attr("transform", "translate(" + width/2 + "," + height/2 + ")scale(" + k + ")translate(" + -v[0] + "," + -v[1] + ")")
+	}
+}
+
+function tick(e) {
+	gStates.each(gravity(e.alpha * .1))
+		.each(collide(.1))
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function gravity(k) {
+	return function(d) {
+		d.x += (d.x0 - d.x) * k;
+		d.y += (d.y0 - d.y) * k;
+	};
+}
+
+function collide(k) {
+	var q = d3.geom.quadtree(statesInHierarchy);
+	
+	return function(node) {
+		var gNode = svg.selectAll(".g_state")
+				.filter(function(d){
+					return d.id == node.id;
+				})
+		var nodeSize = gNode.node().getBBox().height + 5;
+		var nr = nodeSize/1.5 + padding,
+			nx1 = node.x - nr,
+			nx2 = node.x + nr,
+			ny1 = node.y - nr,
+			ny2 = node.y + nr;
+		q.visit(function(quad, x1, y1, x2, y2) {
+		if (quad.point && (quad.point !== node)) {
+			var x = node.x - quad.point.x,
+				y = node.y - quad.point.y,
+				l = x * x + y * y,
+				r = nr + quad.point.r;
+			if (l < r * r) {
+			l = ((l = Math.sqrt(l)) - r) / l * k;
+			node.x -= x *= l;
+			node.y -= y *= l;
+			quad.point.x += x;
+			quad.point.y += y;
+			}
+		}
+		return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+		});
+	};
+}
+
+//*** For slider ***/
+var minDateUnix = new Date('1800-01-01').getFullYear();
+var maxDateUnix = new Date('2017-12-31').getFullYear();
+var step = 60*60*24;
+
+d3.select('#slider3').call(d3.slider()
+	.axis(true).min(minDateUnix).max(maxDateUnix)
+	.on("slide", function(evt, year) {
+		var untilYear = year,
+			filteredData;
+		d3.select("#current_year").transition()
+			.tween("text", function(d) {
+				var self = this;
+				var i = d3.interpolateRound(Math.floor(d3.select(this).text()), Math.floor(untilYear));
+				return function(t) {
+					d3.select(this).text(i(t));
+				};
+			});
+		filteredData = model.filterByYear(untilYear);
+	
+		update(filteredData, untilYear);
+	})
+);
+
 
