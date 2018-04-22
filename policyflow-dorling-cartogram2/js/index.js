@@ -45,17 +45,24 @@ var scale = {
 	policyColorScale: d4.scaleLinear()     // constant over time
     			.range(["yellow","#f00"])
     			.domain([0, 5]),
-	stateCircleScale: d4.scaleLinear().range([10, 40]),
+	stateCircleScale: d4.scaleLinear()
+				.range([10, 40]),
+	stateCircleGlobalScale: d4.scaleLinear()
+				.range([1, 3])
+				.domain([0, 500]),
 	stateColorScale: d4.scaleLinear()  // state circle color depends on state's influence score
-            .range(["#fffea4","#df0000"])
-            .domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+            	.range(["#fffea4","#df0000"])
+            	.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
 	stateInfStrokeScale: d4.scaleLinear()
-    		.range([1, 4])
-    		.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+    			.range([1, 4])
+    			.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
 	stateInfRadiusScale: d4.scaleLinear()
-    		.range([1, 1.2])
-    		.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
+    			.range([1, 1.5])
+    			.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
 	stateManyAdoptionPolicyRadiusScale: d4.scaleLinear(),
+	stateInnerColorScale: d4.scaleLinear()
+				.range(["lemonchiffon", "gold"])
+				.domain([0, 500]),
 	stateInfScale: ""
 }
 var threshold = {
@@ -64,15 +71,39 @@ var threshold = {
 		min: 3,
 		ratio: 2
 	},
+	numPolicyCircles: 20,
+	stateManyAdoptionScoreScale: {
+		range: {
+			min: 1,
+			max: 3
+		}
+	},
 	setPolicyCircle: function(yearUntil){
 		if (yearUntil <= 1850) {
-			this.policyCircle.max = 6;
+			this.policyCircle.max = 5;
+			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
+		} else {
+			this.policyCircle.max = 2.5;
 			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
 		}
-		if (yearUntil <= 1880 && yearUntil >= 1850) {
-			this.policyCircle.max = 4;
-			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
+	},
+	setStateManyAdoptionScoreScale: function(yearUntil){
+		if (yearUntil <= 1920) {
+			console.log("here1");
+			if (yearUntil === 1916){
+				console.log("here");
+				this.stateManyAdoptionScoreScale.range.min = 1;
+				this.stateManyAdoptionScoreScale.range.max = 1;
+			} else {
+				this.stateManyAdoptionScoreScale.range.min = 1;
+				this.stateManyAdoptionScoreScale.range.max = 3;
+			}
+		} else {
+			this.stateManyAdoptionScoreScale.range.min = 1;
+			this.stateManyAdoptionScoreScale.range.max = 10;
 		}
+
+		return [ this.stateManyAdoptionScoreScale.range.min, this.stateManyAdoptionScoreScale.range.max ];
 	}
 }
 
@@ -95,7 +126,14 @@ var model = {
 			adoptedYear = adoption.adopted_year.getYear() + 1900;
 			return adoptedYear < year;
 		});
-	
+		return filteredData;
+	},
+	filterOutliers: function(data, outlierStatesArray){
+		var filteredData;
+
+		filteredData = data.filter(function(adoption){
+			 return outlierStatesArray.indexOf(adoption.name) === -1;
+		});
 		return filteredData;
 	},
 	groupBy: function(opt){
@@ -146,16 +184,19 @@ var model = {
 
 		return dataGroupByStateUntilYear;
 	},
-	setHierarchy: function(dataGroupByStateUntilYear){
-		var _self = this;
-		dataGroupByStateUntilYear.map(function(state) {
+	setHierarchy: function(dataGroupByStateUntilYear, yearUntil){
+		var _self = this,
+			numPolicyAdoptionsArray = [],
+			statesInHierarchy;
+
+		statesInHierarchy = dataGroupByStateUntilYear.map(function(state) {
 			var stateHierarchy,
 				numAdoptedPolicies,
 				point = projection([state.lng, state.lat]);
 			
 			stateHierarchy = d4.hierarchy(state);
 			numAdoptedPolicies = stateHierarchy.children.length;
-			console.log("before hier: ", numAdoptedPolicies);
+			numPolicyAdoptionsArray.push(numAdoptedPolicies);
 
 			_self.setNumPolicyThreshold(stateHierarchy)
 				.sum(function(d){ 
@@ -165,22 +206,32 @@ var model = {
 			var rootSize = stateHierarchy.value,
 				pack = d4.pack().size([rootSize, rootSize]).padding(2),
 				rootNode = pack(stateHierarchy),
-				nodes = rootNode.descendants();
+				nodes = rootNode.descendants(),
+				filteredNodes = nodes;
 
-			if (nodes.length > 21) { nodes = nodes.slice(0, 20); }
-
-			stateHierarchy.nodes = nodes
+			if (nodes.length > 21) { 
+				filteredNodes = nodes.slice(0, 20); 
+			}
 			
 			Object.assign(stateHierarchy, {
 				x: point[0],
 				y: point[1],
 				x0: point[0],
 				y0: point[1],
-				numAdoptedPolicies: numAdoptedPolicies
+				numAdoptedPolicies: numAdoptedPolicies,
+				"nodes": filteredNodes
 			})        
 			return stateHierarchy;      
 		});
-		return dataGroupByStateUntilYear;
+		// Scale by the number of adopted policies 
+		setScale({
+			scale: scale.stateManyAdoptionPolicyRadiusScale,
+			domain: d4.extent(numPolicyAdoptionsArray),
+			range: threshold.setStateManyAdoptionScoreScale(yearUntil)
+		});
+		console.log(scale.stateManyAdoptionPolicyRadiusScale.domain());
+
+		return statesInHierarchy;
 	},
 	setNumPolicyThreshold: function(stateHierarchy){
 		if(stateHierarchy.children.length > 20) { 
@@ -212,7 +263,7 @@ d3.csv("./data/policy_adoptions.csv")
 svg.call(tip);
 
 var statesInHierarchy, dataGroupByStateUntilYear;
-var gStates, circlesData;
+var gStates, circlesData, innerCircles;
 
 var update = function(dataUntilYear, yearUntil){
 	svg.selectAll("circle").remove();
@@ -229,17 +280,8 @@ var update = function(dataUntilYear, yearUntil){
 	dataGroupByStateUntilYear = model.mapStateProperties(dataGroupByStateUntilYear);
 	// Define each state as root
 	// Convert each state key to an object with functions and properties for hierarchical structure
-	statesInHierarchy = model.setHierarchy(dataGroupByStateUntilYear);
-
-	// Scale by the number of adopted policies 
-	setScale({
-		scale: scale.stateManyAdoptionPolicyRadiusScale,
-		domain: d4.extent(statesInHierarchy, function(state) { 
-			return state.children.length; 
-		}),
-		range: [1, 2]
-	})
-
+	statesInHierarchy = model.setHierarchy(dataGroupByStateUntilYear, yearUntil);
+	
 	//***** Set group elements *****//
 	gStates = svg.selectAll(".g_state")
 		.data(statesInHierarchy);
@@ -269,7 +311,7 @@ var update = function(dataUntilYear, yearUntil){
 				
 			}
 			return d.parent? scale.policyColorScale(d.r) : "white";
-		})
+		});
 
 	circlesData
 		.transition().duration(400)
@@ -278,21 +320,20 @@ var update = function(dataUntilYear, yearUntil){
 			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
 				
 			}
-			return d.parent? scale.policyColorScale(d.r) : "white";
+			return d.parent? scale.policyColorScale(d.r) : scale.stateColorScale(statePageRank);
 		})
 		.attr("r", function(d){
 			// If it's outer state circle, save the radius to "innerCircleRadius"
 			// because the whole policy circles should transform in x and y by the radius
 			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
 				var statePageRank, numAdoptedPolicies,
-					innerCircleRadius, innerCircleRadiusOffset, 
 					outerCircleRadius, policyCircleRadius;
 
 				statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
 				numAdoptedPolicies = d.numAdoptedPolicies;
-				innerCircleRadiusOffset = d.r;
-				innerCircleRadius = d.r;
-				outerCircleRadius = innerCircleRadius * scale.stateInfRadiusScale(statePageRank) * scale.stateManyAdoptionPolicyRadiusScale(numAdoptedPolicies);
+				outerCircleRadius = d.r * scale.stateInfRadiusScale(statePageRank) 
+										+ scale.stateManyAdoptionPolicyRadiusScale(numAdoptedPolicies) 
+										+ scale.stateCircleGlobalScale(numAdoptedPolicies);
 				
 				if(outerCircleRadius <= 3)
 					outerCircleRadius = 5;
@@ -307,66 +348,66 @@ var update = function(dataUntilYear, yearUntil){
 			return policyCircleRadius;
 		})
 		.attr("cx", function(d){
-			var stateCircle, innerCircleRadiusOffset;
+			var stateCircle, circleRadiusOffset;
 
 			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-				innerCircleRadiusOffset = d4.select(this.parentNode)
+				circleRadiusOffset = d4.select(this.parentNode)
 								.select(".outer_circle_state")
 								.data()[0].r;
 
-				return d.x - innerCircleRadiusOffset;
+				return d.x - circleRadiusOffset;
 			}
 		})
 		.attr("cy", function(d){
-			var stateCircle, innerCircleRadiusOffset;
+			var stateCircle, circleRadiusOffset;
 			
 			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-				innerCircleRadiusOffset = d4.select(this.parentNode)
+				circleRadiusOffset = d4.select(this.parentNode)
 								.select(".outer_circle_state")
 								.data()[0].r;
 
-				return d.y - innerCircleRadiusOffset;
+				return d.y - circleRadiusOffset;
 			}
-			//return d.y;
-			//return d.y - innerCircleRadiusOffset*2;
 		})
 		.style("stroke", function(d){
-			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
-				
-			}
-			return d.parent? "gray" : scale.stateColorScale(statePageRank);
+			var statePageRank; 
+			statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			
+			return isWhichCircle({ 
+				parentsExist: d.parent, 
+				ifPolicyCircle: "black", 
+				ifStateCircle: "none" 
+			});
 		})
 		.style("stroke-width", function(d){
-			var statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
-			return d.parent? 0.5 : 2 * scale.stateInfStrokeScale(statePageRank)
+			var statePageRank;
+			statePageRank = static.centrality.centralities[d.data.name]["pageRank"];
+			
+			return isWhichCircle({ 
+				parentsExist: d.parent, 
+				ifPolicyCircle: 0.5, 
+				ifStateCircle: 2 * scale.stateInfStrokeScale(statePageRank) 
+			});
 		});
 		
-	
 	circlesData.exit()
 		.remove();
 
-	gStates.selectAll(".inner_circle_state")
-		.attr("cx", function(d){
-			var stateCircle, innerCircleRadiusOffset;
-
-			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-				// stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-				// innerCircleRadiusOffset = stateCircle.attr("r");
-				innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-
-				return d.x - innerCircleRadiusOffset;
-			}
+	innerCircles = gStates
+		.insert("circle", ".outer_circle_state + *")
+		.attr("class", "inner_circle")
+		.attr("r", function(d){
+			return d.r;
 		})
-		.attr("cy", function(d){
-			var stateCircle, innerCircleRadiusOffset;
-			
-			if (d4.select(this).attr("class") !== "circle outer_circle_state outer_circle_state_" + d.data.name) {
-				//stateCircle = d4.select(this.parentNode).select(".outer_circle_state");
-				innerCircleRadiusOffset = d4.select(this.parentNode).select(".outer_circle_state").data()[0].r;
-				console.log(d.y - innerCircleRadiusOffset*10, d.y - innerCircleRadiusOffset, d.y, innerCircleRadiusOffset);
-				return d.y - innerCircleRadiusOffset;
-			}
+		.attr("cx", 0)
+		.attr("cy", 0)
+		.attr("fill", "white")
+		.attr("stroke", function(d){
+			return scale.stateInnerColorScale(d.numAdoptedPolicies);
+		})
+		.attr("stroke-width", function(d){
+			return 1 + scale.stateManyAdoptionPolicyRadiusScale(d.numAdoptedPolicies)
+					 + scale.stateCircleGlobalScale(d.numAdoptedPolicies);
 		});
 
 	force
@@ -406,7 +447,9 @@ function adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil){
 
 	// Assign final score (manyAdoptionScore * earlyAdoptionScore) in the d.value
 	dataUntilYear.map(function(adoption){
-		return Object.assign(adoption, { "value": scale.adoptionScoreScale(adoption.manyAdoptionScore) * adoption.earlyAdoptionScore });
+		return Object.assign(adoption, { 
+			"value": scale.adoptionScoreScale(adoption.manyAdoptionScore) * adoption.earlyAdoptionScore 
+		});
 	});
 
 	// Define the scale of policy circle based on the final score
@@ -467,8 +510,8 @@ function collide(k) {
 				.filter(function(d){
 					return d.id == node.id;
 				})
-		var nodeSize = gNode.node().getBBox().height + 5;
-		var nr = nodeSize/1.5 + padding,
+		var nodeSize = gNode.node().getBBox().height;
+		var nr = nodeSize/1.5 + layout.padding,
 			nx1 = node.x - nr,
 			nx2 = node.x + nr,
 			ny1 = node.y - nr,
@@ -492,6 +535,10 @@ function collide(k) {
 	};
 }
 
+function isWhichCircle(opt){
+	return opt.parentsExist? opt.ifPolicyCircle : opt.ifStateCircle;
+}
+
 //*** For slider ***/
 var minDateUnix = new Date('1800-01-01').getFullYear();
 var maxDateUnix = new Date('2017-12-31').getFullYear();
@@ -502,6 +549,7 @@ d3.select('#slider3').call(d3.slider()
 	.on("slide", function(evt, year) {
 		var untilYear = year,
 			filteredData;
+
 		d3.select("#current_year").transition()
 			.tween("text", function(d) {
 				var self = this;
@@ -511,6 +559,7 @@ d3.select('#slider3').call(d3.slider()
 				};
 			});
 		filteredData = model.filterByYear(untilYear);
+		filteredData = model.filterOutliers(filteredData, ["HI", "AK"]);
 	
 		update(filteredData, untilYear);
 	})
