@@ -40,18 +40,16 @@ var tip = d4.tip()
     });
 
 var scale = {
-	adoptionScoreScale: d4.scaleQuantile(),
+	adoptionScoreScale: d4.scaleLinear(),
 	policyCircleScale: d4.scaleLinear(),   // changes over time
-	policyColorScale: d4.scaleLinear()     // constant over time
-    			.range(["yellow","#f00"])
-    			.domain([0, 5]),
+	policyColorScale: d4.scaleLinear(),     // constant over time
 	stateCircleScale: d4.scaleLinear()
 				.range([10, 40]),
 	stateCircleGlobalScale: d4.scaleLinear()
 				.range([1, 3])
 				.domain([0, 500]),
 	stateColorScale: d4.scaleLinear()  // state circle color depends on state's influence score
-            	.range(["#fffea4","#df0000"])
+            	.range(["#ede7f6","#512da8"])
             	.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
 	stateInfStrokeScale: d4.scaleLinear()
     			.range([1, 4])
@@ -60,16 +58,14 @@ var scale = {
     			.range([1, 1.5])
     			.domain(d4.extent(Object.values(Object.values(static.centrality)[0]).map(function(d){ return d.pageRank; }))),
 	stateManyAdoptionPolicyRadiusScale: d4.scaleLinear(),
-	stateInnerColorScale: d4.scaleLinear()
-				.range(["lemonchiffon", "gold"])
-				.domain([0, 500]),
+	stateInnerColorScale: d4.scaleLinear(),		// By manyAdoptionScore
 	stateInfScale: ""
 }
 var threshold = {
 	policyCircle: { 
 		max: 5,
 		min: 3,
-		ratio: 2
+		ratio: 6
 	},
 	numPolicyCircles: 20,
 	stateManyAdoptionScoreScale: {
@@ -83,24 +79,22 @@ var threshold = {
 			this.policyCircle.max = 5;
 			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
 		} else {
-			this.policyCircle.max = 2.5;
+			this.policyCircle.max = 3.5;
 			this.policyCircle.min = this.policyCircle.max / this.policyCircle.ratio;
 		}
 	},
 	setStateManyAdoptionScoreScale: function(yearUntil){
 		if (yearUntil <= 1920) {
-			console.log("here1");
 			if (yearUntil === 1916){
-				console.log("here");
 				this.stateManyAdoptionScoreScale.range.min = 1;
-				this.stateManyAdoptionScoreScale.range.max = 1;
+				this.stateManyAdoptionScoreScale.range.max = 3;
 			} else {
 				this.stateManyAdoptionScoreScale.range.min = 1;
 				this.stateManyAdoptionScoreScale.range.max = 3;
 			}
 		} else {
-			this.stateManyAdoptionScoreScale.range.min = 1;
-			this.stateManyAdoptionScoreScale.range.max = 10;
+			this.stateManyAdoptionScoreScale.range.min = 0.1;
+			this.stateManyAdoptionScoreScale.range.max = 13;
 		}
 
 		return [ this.stateManyAdoptionScoreScale.range.min, this.stateManyAdoptionScoreScale.range.max ];
@@ -168,10 +162,6 @@ var model = {
 				lng = dataGroupByStateUntilYear[state][0].lng,
 				permalink = dataGroupByStateUntilYear[state][0].permalink,
 				adoptions = dataGroupByStateUntilYear[state];
-			
-			// adoptions.forEach(function(adoption){ 
-			// 	adoption.value = adoption.value; 
-			// });	
 	
 			return { 
 				name: state, 
@@ -229,7 +219,13 @@ var model = {
 			domain: d4.extent(numPolicyAdoptionsArray),
 			range: threshold.setStateManyAdoptionScoreScale(yearUntil)
 		});
-		console.log(scale.stateManyAdoptionPolicyRadiusScale.domain());
+
+		// Scale by the number of adopted policies 
+		setScale({
+			scale: scale.stateInnerColorScale,
+			domain: d4.extent(numPolicyAdoptionsArray),
+			range: ["rgba(197, 202, 233, 0.9)", "rgba(63, 81, 181, 0.9)"]
+		});
 
 		return statesInHierarchy;
 	},
@@ -262,11 +258,40 @@ d3.csv("./data/policy_adoptions.csv")
 
 svg.call(tip);
 
+svg.append("circle")
+	.attr("cx", 30)
+	.attr("cy", layout.height)
+	.attr("r", 30)
+	.attr("fill", "mediumpurple");
+
+svg.append("circle")
+	.attr("cx", 30)
+	.attr("cy", layout.height)
+	.attr("r", 15)
+	.attr("stroke", "rgba(202, 208, 235, 0.9)")
+	.attr("stroke-width", 7)
+	.attr("fill", "white");
+
+svg.append("circle")
+	.attr("cx", 100)
+	.attr("cy", layout.height)
+	.attr("r", 25)
+	.attr("fill", "#ede7f6");
+
+svg.append("circle")
+	.attr("cx", 100)
+	.attr("cy", layout.height)
+	.attr("r", 15)
+	.attr("stroke", "rgba(63, 81, 181, 0.9)")
+	.attr("stroke-width", 9)
+	.attr("fill", "white");
+	
+
 var statesInHierarchy, dataGroupByStateUntilYear;
 var gStates, circlesData, innerCircles;
 
 var update = function(dataUntilYear, yearUntil){
-	svg.selectAll("circle").remove();
+	svg.selectAll(".circle").remove();
 	
 	var policyThreshold;
 
@@ -299,6 +324,19 @@ var update = function(dataUntilYear, yearUntil){
 			return d.nodes; 
 		});
 
+	var policyCircleRadiusArray = [];
+	gStates.data().map(function(d){ return d.children; }).forEach(function(policyCirclesArray){
+		policyCirclesArray.forEach(function(d){ policyCircleRadiusArray.push(d.r); });
+	});
+
+	console.log(policyCircleRadiusArray);
+
+	setScale({ 
+		scale: scale.policyColorScale, 
+		domain: d4.extent(policyCircleRadiusArray),
+		range: ["#fff59d", "orangered"]
+	});
+
 	circlesData
 		.enter().append("circle")
 		.attr("class", function(d) { 
@@ -310,7 +348,7 @@ var update = function(dataUntilYear, yearUntil){
 			if (d4.select(this).attr("class") === "circle outer_circle_state outer_circle_state_" + d.data.name) {
 				
 			}
-			return d.parent? scale.policyColorScale(d.r) : "white";
+			return d.parent? scale.policyColorScale(d.r) : scale.stateColorScale(statePageRank);
 		});
 
 	circlesData
@@ -395,7 +433,7 @@ var update = function(dataUntilYear, yearUntil){
 
 	innerCircles = gStates
 		.insert("circle", ".outer_circle_state + *")
-		.attr("class", "inner_circle")
+		.attr("class", "circle inner_circle")
 		.attr("r", function(d){
 			return d.r;
 		})
@@ -418,14 +456,13 @@ var update = function(dataUntilYear, yearUntil){
 
 	d4.selectAll(".circle")
 		.on("mouseover", function(d){
-			console.log("coming in")
 			tip.show(d);
 		})
 		.on("mouseout", function(d){
 			tip.hide(d);
 		});
 }
-svg.on("click", function() { zoom([width/2-10, height/2-10, height/2]); });
+svg.on("click", function() { zoom([layout.width/2-10, layout.height/2-10, layout.height/2]); });
 
 //*** Functions ***/
 function adjustPolicyCircleScaleYearly(dataUntilYear, yearUntil){
@@ -471,7 +508,7 @@ function zoom(d) {
 	var transition = d3.transition()
 		.duration(d3.event.altKey ? 7500 : 750)
 		.tween("zoom", function(d) {
-			var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + zoomMargin]);
+			var i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2 + layout.zoomMargin]);
 			return function(t) {
 				zoomTo(i(t)); 
 			};
@@ -479,13 +516,13 @@ function zoom(d) {
 	}
 
 function zoomTo(v) {
-	var diameter = height,
+	var diameter = layout.height,
 		k = diameter / v[2],
 		view = v;
 	if(isNaN(v[0])){
 		svg.transition().attr("transform", "translate(0,0)")
 	} else {
-		svg.attr("transform", "translate(" + width/2 + "," + height/2 + ")scale(" + k + ")translate(" + -v[0] + "," + -v[1] + ")")
+		svg.attr("transform", "translate(" + layout.width/2 + "," + layout.height/2 + ")scale(" + k + ")translate(" + -v[0] + "," + -v[1] + ")")
 	}
 }
 
